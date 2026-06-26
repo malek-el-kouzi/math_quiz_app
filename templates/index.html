@@ -5,23 +5,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Math Quiz</title>
-    <link href='https://fonts.googleapis.com/css?family=Playfair+Display:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
         <div id="quiz_box">
-            <p>Question {{ S['current_question'] }} of {{ S['number_of_questions'] }}</p>
-            <p> {{ S['user_correct_answers'] }} correct / {{ S['user_wrong_answers'] }} incorrect</p>
-            <p class="quiz">What is {{ S['question_dict']['leftAdder'] }} {{ S['question_dict']['sign'] }} {{ S['question_dict']['rightAdder'] }} ?</p>
+            <header class="quiz_header">
+                <div>
+                    <p class="eyebrow">Math Quiz</p>
+                    <h1>Ready, set, solve!</h1>
+                </div>
+                <div class="score_board" aria-label="Quiz score">
+                    <span class="score_chip correct">{{ S['user_correct_answers'] }} correct</span>
+                    <span class="score_chip wrong">{{ S['user_wrong_answers'] }} incorrect</span>
+                </div>
+            </header>
 
-            <div class="whitespace"></div>
+            <div class="progress_group">
+                <p>Question {{ S['current_question'] }} of {{ S['number_of_questions'] }}</p>
+                <div class="progress_track" aria-hidden="true">
+                    <div class="progress_fill" style="width: {{ (S['current_question'] / S['number_of_questions'] * 100) | round(0, 'floor') }}%;"></div>
+                </div>
+            </div>
 
-            <form action="" method="POST">
+            <main class="question_area">
+                <p class="quiz">What is {{ S['question_dict']['leftAdder'] }} {{ S['question_dict']['sign'] }} {{ S['question_dict']['rightAdder'] }}?</p>
+            </main>
+
+            <form action="" method="POST" class="answers_form">
                 {% if not show_answer %}
                    <input type="hidden" name="id" value="0" />
                    {% for item in S['options'].values() %}
-                      <input type="submit" class="button" name="answer" value="{{ item }}" />
+                      <input type="submit" class="button answer_button answer_button_{{ loop.index }}" name="answer" value="{{ item }}" />
                    {% endfor %}
                 {% endif %}
             </form>
