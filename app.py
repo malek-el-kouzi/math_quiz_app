@@ -10,11 +10,10 @@ question_categories_list = get_question_categories(data)
 
 @app.route('/', methods=['GET', 'POST'])
 def start():
-    if 'session_variables_created' not in globals():
-        globals()['session_variables_created'] = True 
+    if 'current_question' not in session:
         create_session_variables(session, question_categories_list)
     
-    if request.method == 'GET':
+    if request.method in ['GET', 'HEAD']:
         show_answer = False
         
         update_session_variables(session)
